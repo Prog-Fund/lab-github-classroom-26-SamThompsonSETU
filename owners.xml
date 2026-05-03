@@ -1,0 +1,19 @@
+<object-stream>
+  <list>
+    <models.Owner>
+      <id>100</id>
+      <name>aron</name>
+      <phoneNumber>1578123235</phoneNumber>
+    </models.Owner>
+    <models.Owner>
+      <id>321</id>
+      <name>Lily</name>
+      <phoneNumber>5123135134</phoneNumber>
+    </models.Owner>
+    <models.Owner>
+      <id>100</id>
+      <name>paul</name>
+      <phoneNumber>15817385136</phoneNumber>
+    </models.Owner>
+  </list>
+</object-stream>

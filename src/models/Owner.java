@@ -2,40 +2,97 @@ package models;
 
 import java.util.Objects;
 
-
+// Simple data class representing a pet owner
 public class Owner {
-    //TODO The id (int id)  in the system is entered by the user.
-    //     Default value is 100.
-    //     When creating the Owner, must be an id between 100 and 999
-    //     When updating an existing Owner, only update the  id if between 100 and 999
-    private  int id = 100;// 3 digits - default 100
 
-    //TODO The  name (String name)  in the system is entered by the user.
-    //     Default value is "".
-    //     When creating the Owner, truncate the name to 30 characters.
-    //     When updating an existing Owner, only update the name if it is 30 characters or less.
-    private String name;
+    private int id = 100; // default ID (must be 3 digits)
+    private String name;  // max 30 characters
+    private String phoneNumber = "087302000";
 
-    //TODO The  phoneNumber (String phoneNumber)  in the system is entered by the user.
-    //     Default value is "UnKnown".
-    //     When creating the Owner, only add numbers
-    //     When updating an existing Owner, only update if String only contains numbers.
-    private String phoneNumber = "UnKnown";
-    //TODO Add the constructor, Owner(int , String , String )  that adheres to the above validation rules
     public Owner(int id, String name, String phoneNumber) {
-        //TODO
+        setId(id);
+        initName(name);
+        setPhoneNumber(phoneNumber);
     }
 
-    //TODO Add a getter and setter for each field, that adheres to the above validation rules
+    public int getId() {
+        return id;
+    }
 
+    public String getName() {
+        return name;
+    }
 
-    //TODO Add a generated equals method.
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    // -------------------------------
+    // ID VALIDATION
+    // -------------------------------
+    // Ensures ID is always a 3-digit number (100–999)
+    public void setId(int id) {
+        if (id >= 100 && id <= 999)
+            this.id = id;
+    }
 
-    //TODO The toString should return the string in this format:
-    //      123, Micheal Taylor, 0871234567  is a dog owner
+    // -------------------------------
+    // NAME INITIALISATION (safe truncation)
+    // -------------------------------
+    // Used in constructor to enforce max length rule immediately
+    public void initName(String name) {
+        this.name = (name.length() <= 30)
+                ? name
+                : name.substring(0, 30);
+    }
 
+    public void setName(String name) {
+        if (name.length() <= 30)
+            this.name = name;
+    }
 
+    // -------------------------------
+    // PHONE VALIDATION
+    // -------------------------------
+    // Only allows numeric strings (no spaces or symbols)
+    private boolean onlyContainsNumbers(String text) {
+        return text.matches("[0-9]+");
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        if (onlyContainsNumbers(phoneNumber))
+            this.phoneNumber = phoneNumber;
+    }
+
+    // -------------------------------
+    // equals() override (identity logic)
+    // -------------------------------
+    // Two owners are considered equal if:
+    // - same ID
+    // - same name
+    @Override
+    public boolean equals(Object o) {
+
+        // Fast identity check
+        if (this == o) return true;
+
+        // Ensure same class type
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Owner owner = (Owner) o;
+
+        return getId() == owner.getId()
+                && Objects.equals(getName(), owner.getName());
+    }
+
+    // -------------------------------
+    // toString override (display format)
+    // -------------------------------
+    @Override
+    public String toString() {
+        return "Id: " + id +
+                ", name: " + name +
+                ", phone: " + phoneNumber;
+    }
 }
-

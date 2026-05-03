@@ -1,58 +1,95 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
+// Dog extends Mammal, so it inherits all Pet + Mammal behaviour
+public class Dog extends Mammal {
 
-public class Dog {
-    //TODO add a constant DANGEROUS_DAILY_RATE, make it equal to 40.0
-    //TODO add a constant NONDANGEROUS_DAILY_RATE, make it equal to 30.0
+    // Constants: fixed pricing rules for dogs
+    // Using static final ensures values never change during runtime
+    private static final float DANGEROUS_DAILY_RATE = 40;
+    private static final float NONDANGEROUS_DAILY_RATE = 30;
 
-    //TODO The id (int id)  in the system is entered by the user.
-    //     Default value is 1000.
-    //     When creating the Dog, must be an id between 1000 and 9990
-    //     When updating an existing Dog, only update the  id if between 1000 and 9999
+    private String breed;
+    private boolean dangerousBreed;
 
-    //TODO The  name (String name)  in the system is entered by the user.
-    //     Default value is "".
-    //     When creating the Dog, truncate the name to 20 characters.
-    //     When updating an existing Dog, only update the name if it is 20 characters or less.
+    public Dog(String name, int age, Owner owner, int id,
+               char sex, boolean vaccinated, double weight,
+               boolean neutered, String breed, boolean dangerousBreed) {
 
-    //TODO boolean dangerousBreed defaults to false
+        // Pass shared attributes to parent class (Mammal → Pet)
+        super(name, age, owner, id, sex, vaccinated, weight, neutered);
 
-    //TODO The age (int age)  in the system is entered by the user.
-    //     Default value is 5.
-    //     When creating the Dog, must be an id between 0 and 20
-    //     When updating an existing Dog, only update the  id if between 1000 and 9999
+        this.breed = breed;
+        this.dangerousBreed = dangerousBreed;
+    }
 
-    //TODO char sex -  MUST BE M OR F / default to 'F'
+    public String getBreed() {
+        return breed;
+    }
 
-    //TODO boolean neutered defaults to false
+    public boolean isDangerousBreed() {
+        return dangerousBreed;
+    }
 
-    //TODO ArrayList of owners
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
 
-    //TODO boolean Array called daysInKennel, defaults to false, stores 5 days
-    //   leave at 5 day (so easy to remember starts Monday)
+    public void setDangerousBreed(boolean dangerousBreed) {
+        this.dangerousBreed = dangerousBreed;
+    }
 
-    //TODO add constructor Dog(int,String , String , boolean , int , char , boolean , Owner ) {
+    // -------------------------------
+    // POLYMORPHISM: fee calculation override
+    // -------------------------------
+    // Each pet type has its own pricing logic.
+    // Dogs charge different rates depending on risk level.
+    @Override
+    public double calculateWeeklyFee() {
 
-    //TODO Add a getter and setter for each field, that adheres to the above validation rules
+        // Choose rate based on danger classification
+        double dailyRate = dangerousBreed
+                ? DANGEROUS_DAILY_RATE
+                : NONDANGEROUS_DAILY_RATE;
 
+        double total = 0.0;
 
-    //TODO Add a generated equals method.
+        // getDaysAttending() is inherited from Pet/Mammal
+        // It stores which days the dog attends daycare (boolean array)
+        for (boolean day : getDaysAttending())
+            if (day) total += dailyRate;
 
+        return total;
+    }
 
+    // -------------------------------
+    // equals() override (object comparison logic)
+    // -------------------------------
+    // Two dogs are considered equal if:
+    // - same breed
+    // - same dangerousBreed status
+    @Override
+    public boolean equals(Object o) {
 
-    //TODO create a method called numOfDaysInKennel that returns an int
+        // Fast fail: null or different class means not equal
+        if (o == null || getClass() != o.getClass())
+            return false;
 
-    //TODO create a method called listOwners that returns a String
+        Dog dog = (Dog) o;
 
-    //TODO create a method called getweeklyBill that returns a float with the weekly cost of the dog (num of days * cost)
+        return dangerousBreed == dog.dangerousBreed
+                && Objects.equals(breed, dog.breed);
+    }
 
-
-    //TODO The toString should return the string containing each of the field values including the use of the listOwners()
-    //  should print male neutered or female not neutered
-    //    should print days that the dog is booked into kennels
+    // -------------------------------
+    // toString override (adds Dog-specific details)
+    // -------------------------------
+    @Override
+    public String toString() {
+        return "[Dog] " + super.toString() +
+                ", Breed: " + breed +
+                ", dangerous: " + (dangerousBreed ? "Yes" : "No") +
+                ", Weekly Fee: €" + calculateWeeklyFee();
+    }
 }
-
