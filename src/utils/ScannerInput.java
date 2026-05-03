@@ -10,7 +10,7 @@ import java.util.Scanner;
  * The methods also parse the numeric data entered to ensure it is correct. If it isn't correct,
  * the user is prompted to enter it again.
  *
- * @author Siobhan Drohan, Mairead Meagher
+ * @author Siobhan Drohan, Mairead Meagher, Siobhan Roche
  * @version 1.0
  *
  */
